@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cinepass_be", "cinepass_be.csproj", "{CDCF0B45-A7DC-3758-B23A-EEB43490E39E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinePass_be", "CinePass_be.csproj", "{CDCF0B45-A7DC-3758-B23A-EEB43490E39E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

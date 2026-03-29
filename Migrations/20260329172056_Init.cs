@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace cinepass_be.Migrations
+namespace CinePass_be.Migrations
 {
     /// <inheritdoc />
     public partial class Init : Migration

@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace cinepass_be.Migrations
+namespace CinePass_be.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260329103852_Init")]
+    [Migration("20260329172056_Init")]
     partial class Init
     {
         /// <inheritdoc />

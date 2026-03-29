@@ -33,6 +33,7 @@ public class User
     public ICollection<Like> Likes { get; set; } = [];               // Reviews liked
     public ICollection<Follow> FollowersCollection { get; set; } = [];  // Users following me
     public ICollection<Follow> FollowingCollection { get; set; } = []; // Users I follow
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = [];
 
     // Metadata
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

@@ -1,5 +1,19 @@
+using CinePass_be.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
+// Controllers
+builder.Services.AddControllers();
+
+// Database
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<AppDbContext>(option =>
+  option.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+
+// App
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

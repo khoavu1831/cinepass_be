@@ -1,4 +1,4 @@
-namespace CinePass_be.DTOS.Auth;
+namespace CinePass_be.DTOS;
 
 public class RegisterRequestDto
 {

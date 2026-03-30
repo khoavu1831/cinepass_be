@@ -1,7 +1,5 @@
 namespace CinePass_be.Models;
 
-public enum UserRole { USER, MODERATOR, ADMIN }
-
 /// <summary>
 /// User model for social media review platform
 /// Stores user identity, profile, and social connections
@@ -39,3 +37,4 @@ public class User
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
 }
+public enum UserRole { USER, MODERATOR, ADMIN }

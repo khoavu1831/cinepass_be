@@ -1,5 +1,8 @@
-namespace CinePass_be.Services.User;
+using CinePass_be.Models;
+
+namespace CinePass_be.Services;
 
 public interface IUserService
 {
+  Task<List<User>> GetAllUsers();
 }

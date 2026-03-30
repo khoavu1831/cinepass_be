@@ -28,25 +28,13 @@ public class UserService : IUserService
     return await _userRepository.GetByUsernameAsync(username);
   }
 
-  public async Task<User> CreateUserAsync (CreateUserDto userDto)
-  {
-    // Valid request
-    // Create new user
-    var user = new User
-    {
-      Username = userDto.Username,
-      Email = userDto.Email,
-      PasswordHash = userDto.PasswordHash,
-      Bio = userDto.Bio,
-      AvatarUrl = userDto.AvatarUrl,
-      Role = userDto.Role,
-      IsActive = userDto.IsActive,
-      FollowerCount = 0,
-      FollowingCount = 0,
-      ReviewCount = 0,
-    };
+  // public async Task<User> CreateUserAsync (CreateUserDto userDto)
+  // {
+  //   // Valid request
+  //   // Create new user
+    
 
-    return await _userRepository.CreateUserAsync(user);
-  }
+  //   // return await _userRepository.CreateUserAsync(user);
+  // }
 
 }

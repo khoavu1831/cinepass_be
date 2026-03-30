@@ -8,5 +8,5 @@ public interface IUserService
   Task<List<User>> GetAllUsersAsync();
   Task<User?> GetByEmailAsync(string email);
   Task<User?> GetByUsernameAsync(string username);
-  Task<User> CreateUserAsync (CreateUserDto userDto);
+  // Task<User> CreateUserAsync (CreateUserDto userDto);
 }

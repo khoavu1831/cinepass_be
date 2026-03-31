@@ -114,5 +114,60 @@ public class AuthService : IAuthService
       Username = user.Username
     };
   }
+
+  public async Task<AuthResponseDto> RefreshAsync(string refreshToken)
+  {
+    // Validate refresh token
+    if (string.IsNullOrWhiteSpace(refreshToken))
+      throw new Exception("Refresh token khong duoc de trong - Auth Service");
+
+    var storedRefreshToken = await _refreshTokenRepository.GetByTokenAsync(refreshToken) ??
+      throw new Exception("Refresh token khong hop le - Auth Service");
+
+    if (storedRefreshToken.IsRevoked)
+      throw new Exception("Refresh token da bi thu hoi - Auth Service");
+
+    if (storedRefreshToken.ExpiryDate < DateTime.UtcNow)
+      throw new Exception("Refresh token da het han - Auth Service");
+
+    // Get user
+    var user = await _userRepository.GetByIdAsync(storedRefreshToken.UserId) ??
+      throw new Exception("Khong tim thay user - Auth Service");
+
+    if (!user.IsActive)
+      throw new Exception("Tai khoan da bi khoa - Auth Service");
+
+    // Generate new tokens
+    var (accessToken, newRefreshToken, expires) = TokenHelper.GenerateTokens(user, _config);
+
+    // Revoke old refresh token
+    await _refreshTokenRepository.RevokeAsync(user.Id, refreshToken);
+
+    // Save new refresh token
+    await _refreshTokenRepository.CreateRefreshTokenAsync(newRefreshToken);
+
+    return new AuthResponseDto
+    {
+      AccessToken = accessToken,
+      AccessTokenExpiry = expires,
+      RefreshToken = newRefreshToken.Token,
+      UserId = user.Id,
+      Email = user.Email,
+      Username = user.Username
+    };
+  }
+
+  public async Task LogoutAsync(int userId, string refreshToken)
+  {
+    // Validate input
+    if (string.IsNullOrWhiteSpace(refreshToken))
+      throw new Exception("Refresh token khong duoc de trong - Auth Service");
+
+    // Revoke the refresh token
+    var revokedToken = await _refreshTokenRepository.RevokeAsync(userId, refreshToken);
+
+    if (revokedToken == null)
+      throw new Exception("Refresh token khong hop le - Auth Service");
+  }
 }
 

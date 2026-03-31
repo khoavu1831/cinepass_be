@@ -21,6 +21,13 @@ public class UserRepository : IUserRepository
       .ToListAsync();
   }
 
+  public async Task<User?> GetByIdAsync(int id)
+  {
+    return await _db.Users
+      .AsNoTracking()
+      .FirstOrDefaultAsync(u => u.Id == id);
+  }
+
   public async Task<User?> GetByEmailAsync(string email)
   {
     return await _db.Users

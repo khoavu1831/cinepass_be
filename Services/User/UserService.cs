@@ -13,9 +13,9 @@ public class UserService : IUserService
     _userRepository = userRepository;
   }
 
-  public async Task<List<User>> GetAllUsersAsync()
+  public async Task<List<User>> GetAllAsync()
   {
-    return await _userRepository.GetAllUsersAsync();
+    return await _userRepository.GetAllAsync();
   }
 
   public async Task<User?> GetByEmailAsync(string email)
@@ -27,14 +27,5 @@ public class UserService : IUserService
   {
     return await _userRepository.GetByUsernameAsync(username);
   }
-
-  // public async Task<User> CreateUserAsync (CreateUserDto userDto)
-  // {
-  //   // Valid request
-  //   // Create new user
-    
-
-  //   // return await _userRepository.CreateUserAsync(user);
-  // }
 
 }

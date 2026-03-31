@@ -19,7 +19,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var result = await _userService.GetAllUsersAsync();
+            var result = await _userService.GetAllAsync();
             return Ok(result);
         }
         catch (Exception e)

@@ -5,9 +5,10 @@ namespace CinePass_be.Repositories;
 
 public interface IUserRepository
 {
-  Task<List<User>> GetAllUsersAsync();
+  Task<List<User>> GetAllAsync();
   Task<User?> GetByEmailAsync(string email);
   Task<User?> GetByUsernameAsync(string username);
+  Task<User?> GetByIdentifierAsync(string identifier);
   Task<User> CreateUserAsync(User user);
 
 }

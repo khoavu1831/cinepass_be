@@ -25,10 +25,21 @@ namespace CinePass_be
             }
             catch (Exception ex)
             {
-                return BadRequest(new
-                {
-                    message = "Loi: " + ex.Message
-                });
+                return BadRequest(new { message = "Loi: " + ex.Message });
+            }
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginAsync([FromBody] LoginRequestDto request)
+        {
+            try
+            {
+                var result = await _authService.LoginAsync(request);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Loi: " + ex.Message });
             }
         }
 

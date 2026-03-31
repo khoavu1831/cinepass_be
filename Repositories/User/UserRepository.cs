@@ -8,13 +8,13 @@ namespace CinePass_be.Repositories;
 public class UserRepository : IUserRepository
 {
   private readonly AppDbContext _db;
-  
+
   public UserRepository(AppDbContext db)
   {
     _db = db;
   }
 
-  public async Task<List<User>> GetAllUsersAsync()
+  public async Task<List<User>> GetAllAsync()
   {
     return await _db.Users
       .AsNoTracking()
@@ -33,6 +33,13 @@ public class UserRepository : IUserRepository
     return await _db.Users
       .AsNoTracking()
       .FirstOrDefaultAsync(u => u.Username == username);
+  }
+
+  public async Task<User?> GetByIdentifierAsync(string identifier)
+  {
+    return await _db.Users
+      .AsNoTracking()
+      .FirstOrDefaultAsync(u => u.Email == identifier || u.Username == identifier);
   }
 
   public async Task<User> CreateUserAsync(User user)

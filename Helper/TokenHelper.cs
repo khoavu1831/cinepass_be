@@ -17,7 +17,7 @@ public static class TokenHelper
     return Convert.ToBase64String(randomNumber);
   }
 
-  public static (string AccessToken, string RefreshToken, DateTime ExpiresIn) GenerateTokens(User user, IConfiguration config)
+  public static (string AccessToken, RefreshToken RefreshToken, DateTime ExpiresIn) GenerateTokens(User user, IConfiguration config)
   {
     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"] ?? ""));
     var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -39,7 +39,15 @@ public static class TokenHelper
     );
 
     var accessTokenString = new JwtSecurityTokenHandler().WriteToken(accessToken);
-    var refreshToken = GenerateRandomToken();
+    var refreshTokenString = GenerateRandomToken();
+    var refreshToken = new RefreshToken
+    {
+      UserId = user.Id,
+      Token = refreshTokenString,
+      ExpiryDate = DateTime.UtcNow.AddSeconds(int.Parse(config["Jwt:RefreshTokenExpiry"]!)),
+      IsRevoked = false,
+      CreatedAt = DateTime.UtcNow
+    };
     var expires = accessToken.ValidTo;
 
     return (accessTokenString, refreshToken, expires);

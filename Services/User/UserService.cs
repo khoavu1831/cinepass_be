@@ -1,3 +1,4 @@
+using CinePass_be.DTOS;
 using CinePass_be.Models;
 using CinePass_be.Repositories;
 
@@ -12,8 +13,19 @@ public class UserService : IUserService
     _userRepository = userRepository;
   }
 
-  public Task<List<User>> GetAllUsers()
+  public async Task<List<User>> GetAllAsync()
   {
-    return _userRepository.GetAllUsers();
+    return await _userRepository.GetAllAsync();
   }
+
+  public async Task<User?> GetByEmailAsync(string email)
+  {
+    return await _userRepository.GetByEmailAsync(email);
+  }
+
+  public async Task<User?> GetByUsernameAsync(string username)
+  {
+    return await _userRepository.GetByUsernameAsync(username);
+  }
+
 }

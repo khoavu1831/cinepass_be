@@ -9,7 +9,7 @@ https://localhost:5001/api
 
 ## 🔐 Authentication Endpoints
 
-### POST /auth/register
+### POST /auth/register (x)
 **Register new user**
 ```http
 POST /api/auth/register
@@ -38,7 +38,7 @@ Content-Type: application/json
 
 ---
 
-### POST /auth/login
+### POST /auth/login (x)
 **Login existing user**
 ```http
 POST /api/auth/login
@@ -66,7 +66,7 @@ Content-Type: application/json
 
 ---
 
-### POST /auth/refresh
+### POST /auth/refresh (x)
 **Refresh access token**
 ```http
 POST /api/auth/refresh
@@ -93,7 +93,7 @@ Content-Type: application/json
 
 ---
 
-### POST /auth/logout
+### POST /auth/logout (x)
 **Logout user** *(Auth Required)*
 ```http
 POST /api/auth/logout

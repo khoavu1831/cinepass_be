@@ -1,5 +1,4 @@
 using CinePass_be.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinePass_be;
@@ -16,11 +15,11 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllUsers()
+    public async Task<IActionResult> GetAllUserAsync()
     {
         try
         {
-            var result = await _userService.GetAllUsers();
+            var result = await _userService.GetAllAsync();
             return Ok(result);
         }
         catch (Exception e)

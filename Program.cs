@@ -66,7 +66,6 @@ if (app.Environment.IsDevelopment())
   app.UseSwaggerUI();
 }
 
-app.MapGet("api/", () => "Hello cinepass");
 app.MapControllers();
 
 app.UseHttpsRedirection();

@@ -117,7 +117,7 @@ public class AuthService : IAuthService
 
   public async Task<AuthResponseDto> RefreshAsync(string refreshToken)
   {
-    // Validate refresh token
+    // Validate request
     if (string.IsNullOrWhiteSpace(refreshToken))
       throw new Exception("Refresh token khong duoc de trong - Auth Service");
 
@@ -130,7 +130,6 @@ public class AuthService : IAuthService
     if (storedRefreshToken.ExpiryDate < DateTime.UtcNow)
       throw new Exception("Refresh token da het han - Auth Service");
 
-    // Get user
     var user = await _userRepository.GetByIdAsync(storedRefreshToken.UserId) ??
       throw new Exception("Khong tim thay user - Auth Service");
 
@@ -159,15 +158,15 @@ public class AuthService : IAuthService
 
   public async Task LogoutAsync(int userId, string refreshToken)
   {
-    // Validate input
+    // Validate request
     if (string.IsNullOrWhiteSpace(refreshToken))
       throw new Exception("Refresh token khong duoc de trong - Auth Service");
 
     // Revoke the refresh token
-    var revokedToken = await _refreshTokenRepository.RevokeAsync(userId, refreshToken);
+    var isRevoked = await _refreshTokenRepository.RevokeAsync(userId, refreshToken);
 
-    if (revokedToken == null)
-      throw new Exception("Refresh token khong hop le - Auth Service");
+    if (!isRevoked)
+      throw new Exception("Phien dang nhap khong hop le hoac da ket thuc - Auth Service");
   }
 }
 

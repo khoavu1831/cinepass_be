@@ -27,25 +27,26 @@ public class RefreshTokenRepository : IRefreshTokenRepository
       .FirstOrDefaultAsync(rt => rt.Token == token);
   }
 
-  public async Task<RefreshToken?> RevokeAsync(int userId, string token)
-  {
-    var refreshToken = await _db.RefreshTokens.FirstOrDefaultAsync(rt => rt.UserId == userId && rt.Token == token);
-
-    if (refreshToken != null)
-    {
-      refreshToken.IsRevoked = true;
-      _db.RefreshTokens.Update(refreshToken);
-      await _db.SaveChangesAsync();
-    }
-
-    return refreshToken;
-  }
-
   public async Task<List<RefreshToken>> GetByUserIdAsync(int userId)
   {
     return await _db.RefreshTokens
       .Where(rt => rt.UserId == userId && !rt.IsRevoked)
       .ToListAsync();
+  }
+
+  public async Task<bool> RevokeAsync(int userId, string token)
+  {
+    var refreshToken = await _db.RefreshTokens.FirstOrDefaultAsync(rt => rt.UserId == userId && rt.Token == token);
+
+    if (refreshToken == null || refreshToken.IsRevoked)
+    {
+      return false;
+    }
+
+    refreshToken.IsRevoked = true;
+    await _db.SaveChangesAsync();
+
+    return true;
   }
 }
 

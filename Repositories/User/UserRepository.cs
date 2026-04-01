@@ -42,13 +42,6 @@ public class UserRepository : IUserRepository
       .FirstOrDefaultAsync(u => u.Username == username);
   }
 
-  public async Task<User?> GetByIdentifierAsync(string identifier)
-  {
-    return await _db.Users
-      .AsNoTracking()
-      .FirstOrDefaultAsync(u => u.Email == identifier || u.Username == identifier);
-  }
-
   public async Task<User> CreateUserAsync(User user)
   {
     _db.Users.Add(user);

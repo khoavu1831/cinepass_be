@@ -24,17 +24,17 @@ public class AuthService : IAuthService
   public async Task<AuthResponseDto> LoginAsync(LoginRequestDto request)
   {
     // Valid request
-    if (string.IsNullOrWhiteSpace(request.Identifier))
-      throw new Exception("Khong duoc de trong email hoac username - Auth Service");
-
+    if (string.IsNullOrWhiteSpace(request.Email))
+      throw new Exception("Khong duoc de trong email - Auth Service");
+    
     if (string.IsNullOrWhiteSpace(request.Password))
       throw new Exception("Khong duoc de trong mat khau - Auth Service");
 
-    var user = await _userRepository.GetByIdentifierAsync(request.Identifier) ??
-      throw new Exception("Tai khoan hoac mat khau khong dung - Auth Service");
+    var user = await _userRepository.GetByEmailAsync(request.Email) ??
+      throw new Exception("Email hoac mat khau khong dung - Auth Service");
 
     if (!BC.Verify(request.Password, user.PasswordHash))
-      throw new Exception("Tai khoan hoac mat khau khong dung - Auth Service");
+      throw new Exception("Email hoac mat khau khong dung - Auth Service");
 
     if (!user.IsActive)
       throw new Exception("Tai khoan da bi khoa - Auth Service");

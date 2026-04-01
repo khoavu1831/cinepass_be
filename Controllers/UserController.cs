@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using CinePass_be.DTOS;
 using CinePass_be.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -51,14 +52,16 @@ public class UserController : ControllerBase
         try
         {
             // Get userId from JWT
-            var userIdClaim = User.FindFirst("userId")?.Value ??
-                User.FindFirst("sub")?.Value;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdClaim))
+                return Unauthorized(new { message = "Token khong hop le hoac khong chua ID" });
 
             if (!int.TryParse(userIdClaim, out var currentUserId))
-                return Unauthorized(new { message = "Token khong hop le" });
+                return Unauthorized(new { message = "ID nguoi dung khong hop le" });
 
             if (currentUserId != id)
-                return Forbid("Chi duoc sua profile chinh minh");
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Khong co quyen update profile nguoi khac" });
 
             var result = await _userService.UpdateUserAsync(id, updateUserDto);
             return Ok(result);

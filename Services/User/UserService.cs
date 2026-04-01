@@ -97,6 +97,10 @@ public class UserService : IUserService
 
     if (!string.IsNullOrWhiteSpace(updateUserDto.Username))
     {
+      var existingUsername = await _userRepository.GetByUsernameAsync(updateUserDto.Username);
+      if (existingUsername != null)
+        throw new Exception("Da ton tai username nay - User Service");
+
       user.Username = updateUserDto.Username;
     }
 

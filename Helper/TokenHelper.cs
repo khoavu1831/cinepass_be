@@ -27,7 +27,7 @@ public static class TokenHelper
       new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
       new Claim(ClaimTypes.Email, user.Email),
       new Claim(ClaimTypes.Name, user.Username),
-      new Claim(ClaimTypes.Role, user.Role.ToString()),
+      new Claim(ClaimTypes.Role, user.Role.ToString("G")),  // Force enum name format (ADMIN, not 2)
     };
 
     var accessToken = new JwtSecurityToken(

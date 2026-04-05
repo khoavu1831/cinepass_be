@@ -141,7 +141,7 @@ GET /api/users/1
 
 ---
 
-### PUT /users/{id}
+### PUT /users/{id} (x)
 **Update user profile** *(Auth Required)*
 ```http
 PUT /api/users/1

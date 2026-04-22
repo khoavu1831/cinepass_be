@@ -4,6 +4,7 @@ using CinePass_be.Data;
 using CinePass_be.Repositories;
 using CinePass_be.Services;
 using CinePass_be.Clients.Tmdb;
+using CinePass_be.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,19 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<AppDbContext>(option =>
   option.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173", "http://localhost:5174", "http://localhost:3000")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
 
 // Auth
 var jwtKey = builder.Configuration["Jwt:Key"];
@@ -97,6 +111,10 @@ builder.Services.AddSwaggerGen(options =>
 
 // App
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
+
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();

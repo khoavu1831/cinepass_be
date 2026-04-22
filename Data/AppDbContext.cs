@@ -14,6 +14,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Follow> Follows => Set<Follow>();
     public DbSet<ReviewEmbedding> ReviewEmbeddings => Set<ReviewEmbedding>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<Collection> Collections => Set<Collection>();
+    public DbSet<CollectionMovie> CollectionMovies => Set<CollectionMovie>();
+    public DbSet<Genre> Genres => Set<Genre>();
+    public DbSet<MovieGenre> MovieGenres => Set<MovieGenre>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -179,6 +183,54 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             // CREATE INDEX ON review_embeddings USING ivfflat 
             //     (movie_description_vector vector_cosine_ops) WITH (lists = 100);
             // This migration should be done separately via raw SQL or pgvector extension setup
+        });
+
+        // ========== 8. COLLECTION ==========
+        b.Entity<Collection>(e =>
+        {
+            e.HasKey(c => c.Id);
+            e.HasIndex(c => c.DisplayOrder);
+        });
+
+        // ========== 9. COLLECTION_MOVIE ==========
+        b.Entity<CollectionMovie>(e =>
+        {
+            e.HasKey(cm => new { cm.CollectionId, cm.MovieId });
+
+            e.HasIndex(cm => cm.OrderIndex);
+
+            e.HasOne(cm => cm.Collection)
+                .WithMany(c => c.CollectionMovies)
+                .HasForeignKey(cm => cm.CollectionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            e.HasOne(cm => cm.Movie)
+                .WithMany(m => m.CollectionMovies)
+                .HasForeignKey(cm => cm.MovieId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // ========== 10. GENRE ==========
+        b.Entity<Genre>(e =>
+        {
+            e.HasKey(g => g.Id);
+            e.HasIndex(g => g.TmdbId).IsUnique();
+        });
+
+        // ========== 11. MOVIE_GENRE ==========
+        b.Entity<MovieGenre>(e =>
+        {
+            e.HasKey(mg => new { mg.MovieId, mg.GenreId });
+
+            e.HasOne(mg => mg.Movie)
+                .WithMany(m => m.MovieGenres)
+                .HasForeignKey(mg => mg.MovieId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            e.HasOne(mg => mg.Genre)
+                .WithMany(g => g.MovieGenres)
+                .HasForeignKey(mg => mg.GenreId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

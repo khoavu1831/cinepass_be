@@ -22,7 +22,6 @@ public class AuthService : IAuthService
 
   public async Task<AuthResponseDto> LoginAsync(LoginRequestDto request)
   {
-    // Valid request
     if (string.IsNullOrWhiteSpace(request.Email))
       throw new Exception("Khong duoc de trong email - Auth Service");
     
@@ -44,7 +43,6 @@ public class AuthService : IAuthService
     if (!user.IsActive)
       throw new Exception("Tai khoan da bi khoa - Auth Service");
 
-    // Generate tokens
     var (accessToken, refreshToken, expires) = TokenHelper.GenerateTokens(user, _config);
 
     await _refreshTokenRepository.CreateRefreshTokenAsync(refreshToken);
@@ -63,7 +61,6 @@ public class AuthService : IAuthService
 
   public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request)
   {
-    // Valid request
     if (string.IsNullOrWhiteSpace(request.Username))
       throw new Exception("Khong duoc de trong username - Auth Service");
 
@@ -88,10 +85,8 @@ public class AuthService : IAuthService
     if (!emailValid.IsValid(request.Email))
       throw new Exception("Sai dinh dang email - Auth Service");
 
-    // Hash password
     var hashedPassword = BC.HashPassword(request.Password);
 
-    // Create user
     var user = new User
     {
       Username = request.Username,
@@ -104,12 +99,10 @@ public class AuthService : IAuthService
 
     await _userRepository.CreateUserAsync(user);
 
-    // Create key
     var (accessToken, refreshToken, expires) = TokenHelper.GenerateTokens(user, _config);
 
     await _refreshTokenRepository.CreateRefreshTokenAsync(refreshToken);
 
-    // Return response
     return new AuthResponseDto
     {
       AccessToken = accessToken,
@@ -123,7 +116,6 @@ public class AuthService : IAuthService
 
   public async Task<AuthResponseDto> RefreshAsync(string refreshToken)
   {
-    // Validate request
     if (string.IsNullOrWhiteSpace(refreshToken))
       throw new Exception("Refresh token khong duoc de trong - Auth Service");
 
@@ -142,13 +134,10 @@ public class AuthService : IAuthService
     if (!user.IsActive)
       throw new Exception("Tai khoan da bi khoa - Auth Service");
 
-    // Generate new tokens
     var (accessToken, newRefreshToken, expires) = TokenHelper.GenerateTokens(user, _config);
 
-    // Revoke old refresh token
     await _refreshTokenRepository.RevokeAsync(user.Id, refreshToken);
 
-    // Save new refresh token
     await _refreshTokenRepository.CreateRefreshTokenAsync(newRefreshToken);
 
     return new AuthResponseDto
@@ -164,11 +153,9 @@ public class AuthService : IAuthService
 
   public async Task LogoutAsync(int userId, string refreshToken)
   {
-    // Validate request
     if (string.IsNullOrWhiteSpace(refreshToken))
       throw new Exception("Refresh token khong duoc de trong - Auth Service");
 
-    // Revoke the refresh token
     var isRevoked = await _refreshTokenRepository.RevokeAsync(userId, refreshToken);
 
     if (!isRevoked)

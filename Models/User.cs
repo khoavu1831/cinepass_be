@@ -37,4 +37,4 @@ public class User
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
 }
-public enum UserRole { USER, MODERATOR, ADMIN }
+public enum UserRole { USER, MODERATOR, ADMIN, SUPERADMIN }

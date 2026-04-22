@@ -29,8 +29,14 @@ public class AuthService : IAuthService
     if (string.IsNullOrWhiteSpace(request.Password))
       throw new Exception("Khong duoc de trong mat khau - Auth Service");
 
-    var user = await _userRepository.GetByEmailAsync(request.Email) ??
-      throw new Exception("Email hoac mat khau khong dung - Auth Service");
+    var user = await _userRepository.GetByEmailAsync(request.Email);
+    if (user == null)
+    {
+        user = await _userRepository.GetByUsernameAsync(request.Email);
+    }
+    
+    if (user == null)
+      throw new Exception("Email/Username hoac mat khau khong dung - Auth Service");
 
     if (!BC.Verify(request.Password, user.PasswordHash))
       throw new Exception("Email hoac mat khau khong dung - Auth Service");
@@ -50,7 +56,8 @@ public class AuthService : IAuthService
       RefreshToken = refreshToken.Token,
       Email = user.Email,
       Username = user.Username,
-      UserId = user.Id
+      UserId = user.Id,
+      Role = user.Role.ToString()
     };
   }
 

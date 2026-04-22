@@ -112,6 +112,25 @@ builder.Services.AddSwaggerGen(options =>
 // App
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    // context.Database.Migrate();
+
+    if (!context.Users.Any(u => u.Role == CinePass_be.Models.UserRole.SUPERADMIN))
+    {
+        context.Users.Add(new CinePass_be.Models.User
+        {
+            Username = "admin",
+            Email = "admin@cinepass.com",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin"),
+            Role = CinePass_be.Models.UserRole.SUPERADMIN,
+            IsActive = true
+        });
+        context.SaveChanges();
+    }
+}
+
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseCors("AllowFrontend");

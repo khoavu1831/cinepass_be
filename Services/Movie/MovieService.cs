@@ -134,6 +134,29 @@ public class MovieService : IMovieService
     }
   }
 
+  public async Task<object> SearchTmdbPreviewAsync(string query, int page = 1)
+  {
+    if (string.IsNullOrWhiteSpace(query))
+      return new { data = new List<object>(), total = 0 };
+
+    var tmdbResponse = await _tmdbClient.SearchMoviesAsync(query, page);
+    if (tmdbResponse?.Results == null)
+      return new { data = new List<object>(), total = 0 };
+
+    var results = tmdbResponse.Results.Select(r => new
+    {
+      TmdbId = r.Id,
+      Title = r.Title,
+      Year = !string.IsNullOrEmpty(r.ReleaseDate) && r.ReleaseDate.Length >= 4
+          ? r.ReleaseDate.Substring(0, 4) : "",
+      PosterUrl = !string.IsNullOrEmpty(r.PosterPath)
+          ? $"https://image.tmdb.org/t/p/w500{r.PosterPath}" : null,
+      Rating = r.VoteAverage
+    }).ToList<object>();
+
+    return new { data = results, total = results.Count };
+  }
+
   private Movie ConvertTmdbToMovieModel(TmdbMovieDetailsResponse tmdbMovie)
   {
     // Extract genres

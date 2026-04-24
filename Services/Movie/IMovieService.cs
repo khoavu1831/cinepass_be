@@ -13,6 +13,7 @@ public interface IMovieService
   Task<MovieResponseDto> GetByIdAsync(int id);
   Task<MovieResponseDto?> FetchAndSaveFromTmdbAsync(int tmdbId);
   Task<List<MovieResponseDto>> SearchAndFetchFromTmdbAsync(string query, int page = 1);
+  Task<object> SearchTmdbPreviewAsync(string query, int page = 1);
   Task<BatchOperationResultDto> FetchAndSaveMovieListAsync(AdminFetchMoviesRequestDto request);
   Task<MovieResponseDto?> UpdateMovieAsync(int id, UpdateMovieDto dto);
   Task<bool> DeleteMovieAsync(int id);

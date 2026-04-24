@@ -26,6 +26,7 @@ public class CollectionRepository : ICollectionRepository
     {
         return await _db.Collections
             .Include(c => c.CollectionMovies)
+                .ThenInclude(cm => cm.Movie)
             .FirstOrDefaultAsync(c => c.Id == id);
     }
 

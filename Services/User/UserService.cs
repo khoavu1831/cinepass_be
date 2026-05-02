@@ -124,4 +124,38 @@ public class UserService : IUserService
       UpdatedAt = user.UpdatedAt
     };
   }
+
+  public async Task IncrementFollowCountersAsync(int followerId, int followingId)
+  {
+    var follower = await _userRepository.GetByIdAsync(followerId);
+    var following = await _userRepository.GetByIdAsync(followingId);
+
+    if (follower != null)
+    {
+      follower.FollowingCount++;
+      await _userRepository.UpdateUserAsync(follower);
+    }
+    if (following != null)
+    {
+      following.FollowerCount++;
+      await _userRepository.UpdateUserAsync(following);
+    }
+  }
+
+  public async Task DecrementFollowCountersAsync(int followerId, int followingId)
+  {
+    var follower = await _userRepository.GetByIdAsync(followerId);
+    var following = await _userRepository.GetByIdAsync(followingId);
+
+    if (follower != null)
+    {
+      follower.FollowingCount = Math.Max(0, follower.FollowingCount - 1);
+      await _userRepository.UpdateUserAsync(follower);
+    }
+    if (following != null)
+    {
+      following.FollowerCount = Math.Max(0, following.FollowerCount - 1);
+      await _userRepository.UpdateUserAsync(following);
+    }
+  }
 }

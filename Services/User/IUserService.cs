@@ -10,4 +10,6 @@ public interface IUserService
   Task<UserResponseDto> GetByEmailAsync(string email);
   Task<UserResponseDto> GetByUsernameAsync(string username);
   Task<UpdateUserResponseDto> UpdateUserAsync(int id, UpdateUserDto updateUserDto);
+  Task IncrementFollowCountersAsync(int followerId, int followingId);
+  Task DecrementFollowCountersAsync(int followerId, int followingId);
 }

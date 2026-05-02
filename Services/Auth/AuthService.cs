@@ -55,7 +55,9 @@ public class AuthService : IAuthService
       Email = user.Email,
       Username = user.Username,
       UserId = user.Id,
-      Role = user.Role.ToString()
+      Role = user.Role.ToString(),
+      AvatarUrl = user.AvatarUrl,
+      Bio = user.Bio
     };
   }
 

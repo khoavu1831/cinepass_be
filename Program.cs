@@ -59,6 +59,8 @@ builder.Services
 builder.Services.AddAuthorization(options =>
 {
   options.AddPolicy("SelfOnly", policy => policy.Requirements.Add(new SelfRequirement()));
+  options.AddPolicy("AdminOnly", policy => policy.RequireRole("ADMIN", "SUPERADMIN"));
+  options.AddPolicy("SuperAdminOnly", policy => policy.RequireRole("SUPERADMIN"));
 });
 
 // DI
@@ -71,6 +73,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<ICollectionRepository, CollectionRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IFollowRepository, FollowRepository>();
 
 // DI - Services
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -79,6 +83,7 @@ builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<ICollectionService, CollectionService>();
 builder.Services.AddScoped<IAdminUserService, AdminUserService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 
 // DI - HttpClient and Tmdb
 builder.Services.AddHttpClient<ITmdbClient, TmdbClient>();
